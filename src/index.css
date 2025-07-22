@@ -1,28 +1,280 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Montserrat:wght@100..900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply bg-fog text-gray-900 transition-colors duration-500;
+/* Base styles */
+html {
+  scroll-behavior: smooth;
 }
 
+body {
+  @apply bg-fog text-gray-900 transition-colors duration-500 font-sans;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Dark mode styles */
+.dark body {
+  @apply bg-night text-snow;
+}
+
+/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   background: theme('colors.fog');
 }
+
 ::-webkit-scrollbar-thumb {
-  background: theme('colors.earth');
+  background: linear-gradient(180deg, theme('colors.accent'), theme('colors.accent-dark'));
   border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
 }
 
-@keyframes glow {
-  0%, 100% { opacity: 0.7; filter: blur(8px); }
-  50% { opacity: 1; filter: blur(16px); }
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, theme('colors.accent-dark'), theme('colors.accent'));
 }
+
+.dark ::-webkit-scrollbar {
+  background: theme('colors.night');
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, theme('colors.accent'), theme('colors.accent-dark'));
+}
+
+/* Custom animations */
+@keyframes glow {
+  0%, 100% { 
+    opacity: 0.7; 
+    filter: blur(8px); 
+  }
+  50% { 
+    opacity: 1; 
+    filter: blur(16px); 
+  }
+}
+
+@keyframes float {
+  0%, 100% { 
+    transform: translateY(0px); 
+  }
+  50% { 
+    transform: translateY(-10px); 
+  }
+}
+
+@keyframes sparkle {
+  0%, 100% { 
+    opacity: 0; 
+    transform: scale(0.8); 
+  }
+  50% { 
+    opacity: 1; 
+    transform: scale(1.2); 
+  }
+}
+
+@keyframes climb {
+  0% { 
+    transform: translateY(20px) scale(0.9); 
+    opacity: 0; 
+  }
+  100% { 
+    transform: translateY(0px) scale(1); 
+    opacity: 1; 
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px theme('colors.accent/50');
+  }
+  50% {
+    box-shadow: 0 0 20px theme('colors.accent/80');
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Utility classes */
 .animate-glow {
   animation: glow 2.2s infinite ease-in-out;
 }
 
+.animate-float {
+  animation: float 3s infinite ease-in-out;
+}
+
+.animate-sparkle {
+  animation: sparkle 1.5s infinite ease-in-out;
+}
+
+.animate-climb {
+  animation: climb 0.8s ease-out;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s infinite ease-in-out;
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}
+
 .divider-gradient {
   @apply w-full h-16 bg-gradient-to-b from-fog/0 via-earth/10 to-fog/0;
+}
+
+/* Text gradient utilities */
+.text-gradient {
+  background: linear-gradient(135deg, theme('colors.accent'), theme('colors.accent-dark'));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-mountain {
+  background: linear-gradient(135deg, theme('colors.stone'), theme('colors.accent'), theme('colors.success'));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Backdrop effects */
+.backdrop-mountain {
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .backdrop-mountain {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Selection styles */
+::selection {
+  background-color: theme('colors.accent/30');
+  color: theme('colors.cliff');
+}
+
+.dark ::selection {
+  background-color: theme('colors.accent/40');
+  color: theme('colors.snow');
+}
+
+/* Focus styles */
+*:focus {
+  outline: none;
+}
+
+*:focus-visible {
+  outline: 2px solid theme('colors.accent');
+  outline-offset: 2px;
+}
+
+/* Loading states */
+.loading-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid theme('colors.stone/30');
+  border-top: 2px solid theme('colors.accent');
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Image loading */
+img {
+  @apply transition-opacity duration-300;
+}
+
+img:not([loaded]) {
+  @apply opacity-0;
+}
+
+img[loaded] {
+  @apply opacity-100;
+}
+
+/* Custom component styles */
+.pin-marker {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+.trail-glow {
+  filter: drop-shadow(0 0 4px currentColor);
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+  
+  .text-responsive-xl {
+    @apply text-3xl md:text-4xl lg:text-5xl;
+  }
+  
+  .text-responsive-2xl {
+    @apply text-4xl md:text-5xl lg:text-6xl;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --tw-color-accent: #0066CC;
+    --tw-color-accent-dark: #004499;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  body {
+    background: white !important;
+    color: black !important;
+  }
+}
+
+/* High DPI display optimizations */
+@media (min-resolution: 2dppx) {
+  .sharp-rendering {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
 } 
